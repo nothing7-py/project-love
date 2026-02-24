@@ -50,6 +50,10 @@ button {padding:15px 30px; font-size:18px; border:none; border-radius:30px; curs
 </div>
 
 <div id="game">
+  <br><br>
+<textarea id="receiverFeelings" placeholder="Write your feelings here..." style="width:80%;height:80px;border-radius:15px;padding:10px;"></textarea>
+<br><br>
+<button onclick="saveFeelings()">Save Our Moment 💍</button>
 <h2 id="receiverMessage">Do you want to confess your feelings too?</h2>
 <button id="loveYes">I Love You Too 💕</button>
 <button id="loveNo">Maybe Later 😳</button>
@@ -58,6 +62,16 @@ button {padding:15px 30px; font-size:18px; border:none; border-radius:30px; curs
 <audio id="music" src="obhodro.mp3" autoplay loop></audio>
 
 <script>
+  function saveFeelings(){
+let text = document.getElementById("receiverFeelings").value;
+if(text.trim() !== ""){
+  typeWriter(`${receiver} says: "${text}" 💖`);
+  fireworks();
+  heartBurst();
+} else {
+  typeWriter("Even silence between us feels special... 🌸");
+}
+}
 // ---------- MULTIPLE THEMES ----------
 const themes=['themes/cherry.jpg','themes/sunset.jpg','themes/retro.jpg','themes/traditional.jpg'];
 let idx=0; const bg=document.getElementById('bg');
@@ -95,9 +109,42 @@ noBtn.addEventListener('mouseover',()=>{
 });
 
 yesBtn.addEventListener('click',()=>{
-document.getElementById('voice').play(); heartBurst(); fireworks(); loveMeter(); typeWriter(`From now on, ${receiver} 💖 it's you and ${sender} forever 🌸`);
-setTimeout(()=>{document.getElementById('game').style.display='block';},3000);
+document.getElementById('voice').play();
+startLoveStory();
 });
+  function startLoveStory(){
+
+let scenes = [
+`The day I met you, something felt different... 🌸`,
+`Every moment with you feels softer, warmer, brighter... ✨`,
+`${receiver}, you changed my world in ways you don't even know...`,
+`From ${sender}'s heart... since ${birthday || "that special day"}...`,
+`I don't want just today... I want every tomorrow with you 💖`,
+`So here I am... choosing you. Again. And again. Forever.`
+];
+
+let i = 0;
+let msg = document.getElementById("finalMessage");
+
+function nextScene(){
+  if(i < scenes.length){
+    typeWriter(scenes[i]);
+    heartBurst();
+    setTimeout(()=>{
+      i++;
+      nextScene();
+    },5000);
+  } else {
+    setTimeout(()=>{
+      fireworks();
+      loveMeter();
+      document.getElementById('game').style.display='block';
+    },3000);
+  }
+}
+
+nextScene();
+}
 
 // ---------- TYPEWRITER ----------
 function typeWriter(text){let i=0;let speed=50;let msg=document.getElementById('finalMessage');msg.innerHTML="";function typing(){if(i<text.length){msg.innerHTML+=text.charAt(i);i++;setTimeout(typing,speed);}}typing();}
