@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Forever With Me 🌸</title>
+<style>
+/* ---------- GENERAL ---------- */
+body, html {margin:0; padding:0; height:100%; overflow:hidden; font-family:'Georgia', serif;}
+#bg {position:fixed; top:0; left:0; width:100%; height:100%; background-size:cover; background-position:center; transition: background-image 2s ease-in-out;}
+.overlay {position:absolute; width:100%; height:100%; background: linear-gradient(to top, rgba(0,0,0,0.5), rgba(255,182,193,0.2));}
+
+/* ---------- CARD & BUTTONS ---------- */
+.card {position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(255,255,255,0.2); backdrop-filter:blur(15px); border-radius:25px; padding:40px; text-align:center; color:white;}
+button {padding:15px 30px; font-size:18px; border:none; border-radius:30px; cursor:pointer; margin:10px; transition:0.3s;}
+#yes {background:pink; color:white;}
+#no {background:white; color:black; position:relative;}
+
+/* ---------- PETALS & SPARKLES ---------- */
+.petal, .sparkle {position:absolute; border-radius:50%;}
+.petal {width:20px; height:20px; background:pink; opacity:0.7; animation:fall linear infinite;}
+@keyframes fall {to{transform:translateY(100vh) rotate(360deg);}}
+.sparkle {width:8px; height:8px; background:rgba(255,255,255,0.8); pointer-events:none; animation:spark 1s linear forwards;}
+@keyframes spark {0%{opacity:1; transform:scale(1);} 100%{opacity:0; transform:scale(2);}}
+
+#finalMessage{margin-top:20px; font-size:20px; min-height:50px;}
+#game{display:none; margin-top:20px;}
+</style>
+</head>
+<body>
+
+<div id="bg"></div>
+<div class="overlay"></div>
+
+<div class="card" id="card">
+<h1 id="greeting">Will You Be Mine Forever? 🌸</h1>
+
+<div id="nameInput">
+<p>Sender Name:</p><input type="text" id="senderName"><br><br>
+<p>Receiver Name:</p><input type="text" id="receiverName"><br><br>
+<p>Sender Birthday:</p><input type="date" id="birthday"><br><br>
+<button onclick="startGame()">Start 💖</button>
+</div>
+
+<div id="buttons" style="display:none;">
+<button id="yes">Yes 💖</button>
+<button id="no">No 🙈</button>
+<div id="finalMessage"></div>
+<br>
+<button onclick="playVoice()">🔊 Play My Voice</button>
+</div>
+
+<div id="game">
+<h2 id="receiverMessage">Do you want to confess your feelings too?</h2>
+<button id="loveYes">I Love You Too 💕</button>
+<button id="loveNo">Maybe Later 😳</button>
+</div>
+
+<audio id="music" src="music.mp3"></audio>
+<audio id="voice" src="voice.mp3"></audio>
+
+<script>
+// ---------- MULTIPLE THEMES ----------
+const themes=['themes/cherry.jpg','themes/sunset.jpg','themes/retro.jpg','themes/traditional.jpg'];
+let idx=0; const bg=document.getElementById('bg');
+function changeBackground(){bg.style.backgroundImage=`url('${themes[idx]}')`; idx=(idx+1)%themes.length;}
+changeBackground(); setInterval(changeBackground,10000);
+
+// ---------- PETALS ----------
+for(let i=0;i<25;i++){let p=document.createElement("div");p.className="petal";p.style.left=Math.random()*100+"vw";p.style.animationDuration=(5+Math.random()*5)+"s";p.style.width=p.style.height=(10+Math.random()*15)+"px";document.body.appendChild(p);}
+
+// ---------- SPARKLE MOUSE ----------
+document.addEventListener('mousemove',(e)=>{let s=document.createElement('div');s.className='sparkle';s.style.left=e.pageX+'px';s.style.top=e.pageY+'px';document.body.appendChild(s);setTimeout(()=>s.remove(),1000);});
+
+// ---------- GAME START ----------
+let sender='',receiver='',birthday='';
+function startGame(){
+sender=document.getElementById('senderName').value||'You';
+receiver=document.getElementById('receiverName').value||'Someone Special';
+birthday=document.getElementById('birthday').value||'';
+document.getElementById('nameInput').style.display='none';
+document.getElementById('buttons').style.display='block';
+let greet=`Hey ${receiver}, ${sender} has a special message 💖`;
+if(birthday) greet+=` (From ${sender}'s birthday: ${birthday})`;
+document.getElementById('greeting').innerText=greet;
+}
+
+// ---------- BUTTONS ----------
+const noBtn=document.getElementById('no'); const yesBtn=document.getElementById('yes');
+noBtn.addEventListener('mouseover',()=>{
+  noBtn.style.position='absolute';
+  noBtn.style.left=Math.random()*(window.innerWidth-100)+'px';
+  noBtn.style.top=Math.random()*(window.innerHeight-50)+'px';
+  noBtn.style.transform='scale(0.6)';
+  yesBtn.style.transform='scale(1.3)';
+  document.getElementById('music').play();
+});
+
+yesBtn.addEventListener('click',()=>{
+document.getElementById('voice').play(); heartBurst(); fireworks(); loveMeter(); typeWriter(`From now on, ${receiver} 💖 it's you and ${sender} forever 🌸`);
+setTimeout(()=>{document.getElementById('game').style.display='block';},3000);
+});
+
+// ---------- TYPEWRITER ----------
+function typeWriter(text){let i=0;let speed=50;let msg=document.getElementById('finalMessage');msg.innerHTML="";function typing(){if(i<text.length){msg.innerHTML+=text.charAt(i);i++;setTimeout(typing,speed);}}typing();}
+
+// ---------- HEART BURST ----------
+function heartBurst(){for(let i=0;i<20;i++){let heart=document.createElement('div');heart.innerHTML='💖';heart.style.position='absolute';heart.style.left=Math.random()*window.innerWidth+'px';heart.style.top=Math.random()*window.innerHeight+'px';heart.style.fontSize=(20+Math.random()*20)+'px';document.body.appendChild(heart);setTimeout(()=>heart.remove(),2000);}}
+
+// ---------- FIREWORKS ----------
+function fireworks(){for(let i=0;i<15;i++){let f=document.createElement('div');f.innerHTML='✨';f.style.position='absolute';f.style.left=Math.random()*window.innerWidth+'px';f.style.top=Math.random()*window.innerHeight+'px';f.style.fontSize=(20+Math.random()*30)+'px';document.body.appendChild(f);setTimeout(()=>f.remove(),2000);}}
+
+// ---------- LOVE METER ----------
+function loveMeter(){let meter=document.createElement('div'); meter.style.position='fixed'; meter.style.bottom='20px'; meter.style.left='50%'; meter.style.transform='translateX(-50%)'; meter.style.width='300px'; meter.style.height='20px'; meter.style.background='rgba(255,255,255,0.3)'; meter.style.borderRadius='10px'; document.body.appendChild(meter);
+let fill=document.createElement('div'); fill.style.height='100%'; fill.style.width='0%'; fill.style.background='pink'; fill.style.borderRadius='10px'; fill.style.transition='width 3s'; meter.appendChild(fill); setTimeout(()=>fill.style.width='100%',100); setTimeout(()=>meter.remove(),4000);}
+
+// ---------- VOICE ----------
+function playVoice(){document.getElementById('voice').play();}
+
+// ---------- MINI GAME ----------
+const loveYes=document.getElementById('loveYes'); const loveNo=document.getElementById('loveNo'); const receiverMessage=document.getElementById('receiverMessage');
+loveYes.addEventListener('click',()=>{
+receiverMessage.innerText=`Yay! ${receiver} 💖 loves you too, ${sender}! 🌸`;
+heartBurst(); fireworks(); typeWriter(`${receiver} says: I love you too! 💕`);
+});
+
+loveNo.addEventListener('click',()=>{
+receiverMessage.innerText=`Oh... maybe next time 💔`;
+typeWriter(`${receiver} says: Maybe later 😳`);
+});
+
+</script>
+</body>
+</html>
