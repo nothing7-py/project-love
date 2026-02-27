@@ -1,20 +1,18 @@
-body,html{
+body{
   margin:0;
-  padding:0;
-  height:100%;
   overflow:hidden;
-  font-family:Georgia,serif;
+  font-family: 'Georgia', serif;
 }
 
 .slider{
   display:flex;
-  height:100%;
-  transition:transform 0.8s ease;
+  width:1100vw;
+  transition: transform 1s ease-in-out;
 }
 
 .slide{
-  min-width:100%;
-  height:100%;
+  width:100vw;
+  height:100vh;
   background-size:cover;
   background-position:center;
   display:flex;
@@ -22,33 +20,47 @@ body,html{
   align-items:center;
   text-align:center;
   color:white;
+  font-size:2.5rem;
   position:relative;
 }
 
-.slide::after{
+.slide::before{
   content:"";
   position:absolute;
-  inset:0;
-  background:rgba(0,50,20,0.5);
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
 }
 
-.content{
+.slide h1{
   position:relative;
-  z-index:2;
-  font-size:28px;
-  max-width:80%;
+  animation: fadeIn 2s ease forwards;
 }
 
-button{
-  padding:12px 25px;
-  font-size:18px;
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(40px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* Proposal buttons */
+#yes, #no{
+  padding:15px 40px;
+  font-size:20px;
   border:none;
-  border-radius:25px;
+  border-radius:30px;
   cursor:pointer;
+  margin:20px;
+  transition:0.3s;
 }
 
 #yes{
   background:#7CFC00;
+}
+
+#yes:hover{
+  transform:scale(1.2);
 }
 
 #no{
