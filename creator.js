@@ -31,10 +31,8 @@ function createStory(){
 
   const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
 
-  const baseURL = window.location.href.replace("index.html","");
-
-  const link = baseURL + "story.html?data=" + encoded;
-
+  const baseURL = window.location.origin + window.location.pathname.replace("index.html","");
+const link = baseURL + "story.html?data=" + encoded;
   document.getElementById("generatedLink").innerHTML =
     `<p>Your Love Link:</p>
      <input value="${link}" style="width:90%" readonly>`;
