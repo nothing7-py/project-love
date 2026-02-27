@@ -2,26 +2,62 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Create Our Forest Story 🌿</title>
+<title>Our Forest Love Story 🌿</title>
 <link rel="stylesheet" href="style.css">
 </head>
-<body class="creator">
+<body class="story">
 
-<h1>Create Your Forest Love Story 🌿</h1>
+<div id="storyContainer"></div>
 
-<input id="sender" placeholder="Your Name"><br><br>
-<input id="receiver" placeholder="His Name"><br><br>
-<input type="date" id="date"><br><br>
-<input id="yourEmail" placeholder="Your Email (for his reply)"><br><br>
+<script>
+function getStoryData() {
+  const params = new URLSearchParams(window.location.search);
+  const encoded = params.get("data");
 
-<textarea id="message" placeholder="What does he mean to you?"></textarea><br><br>
+  if (!encoded) {
+    document.getElementById("storyContainer").innerHTML =
+      "<h2>No story found 🌿</h2>";
+    return;
+  }
 
-<input type="file" id="images" multiple accept="image/*"><br><br>
+  try {
+    const decoded = JSON.parse(
+      decodeURIComponent(atob(encoded))
+    );
 
-<button onclick="createStory()">Generate Love Link 💚</button>
+    displayStory(decoded);
 
-<div id="generatedLink"></div>
+  } catch (error) {
+    document.getElementById("storyContainer").innerHTML =
+      "<h2>Invalid story link 💔</h2>";
+  }
+}
 
-<script src="creator.js"></script>
+function displayStory(data) {
+  const container = document.getElementById("storyContainer");
+
+  let imagesHTML = "";
+
+  if (data.images && data.images.length > 0) {
+    data.images.forEach(img => {
+      imagesHTML += `<img src="${img}" class="story-image">`;
+    });
+  }
+
+  container.innerHTML = `
+    <h1>${data.sender} 💚 ${data.receiver}</h1>
+    <p><strong>Date:</strong> ${data.date}</p>
+    <p class="message">${data.message}</p>
+    ${imagesHTML}
+    <p class="footer">
+      If you want to reply 💌<br>
+      Contact: ${data.email}
+    </p>
+  `;
+}
+
+getStoryData();
+</script>
+
 </body>
 </html>
