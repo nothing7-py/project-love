@@ -1,28 +1,216 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Proposal</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
+<title>Our Story</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: white;
+    overflow: hidden;
+    background: linear-gradient(-45deg, #000000, #0f0f3d, #1a0033, #000000);
+    background-size: 400% 400%;
+    animation: gradientMove 15s ease infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Floating Shapes */
+.shape {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    animation: float 25s linear infinite;
+}
+
+@keyframes float {
+    from { transform: translateY(100vh); }
+    to { transform: translateY(-100vh); }
+}
+
+/* Slides */
+.slide {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    padding: 80px;
+    box-sizing: border-box;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 1s ease;
+    pointer-events: none;
+}
+
+.slide.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+textarea {
+    width: 60%;
+    height: 200px;
+    margin-top: 20px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+}
+
+button {
+    margin: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#progressBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 6px;
+    background: cyan;
+    width: 0%;
+}
+</style>
 </head>
+
 <body>
 
-<div id="app">
+<div id="progressBar"></div>
 
-  <div id="slides"></div>
-
-  <div class="nav">
-    <button id="prev">Prev</button>
-    <button id="next">Next</button>
-  </div>
-
+<!-- Slides 1–10 -->
+<div class="slide active">
+    <h1>How We Met</h1>
+    <textarea oninput="unlockNext()"></textarea>
 </div>
 
-<!-- audio -->
-<audio id="song1" src="obhodro.mp3" loop preload="auto"></audio>
-<audio id="song2" src="shinunoga.mp3" loop preload="auto"></audio>
+<div class="slide">
+    <h1>My First Impression</h1>
+    <textarea oninput="unlockNext()"></textarea>
+</div>
 
-<script src="app.js"></script>
+<div class="slide">
+    <h1>The First Moment I Knew</h1>
+    <textarea oninput="unlockNext()"></textarea>
+</div>
+
+<div class="slide">
+    <h1>Our Best Memory</h1>
+    <textarea oninput="unlockNext()"></textarea>
+</div>
+
+<div class="slide">
+    <h1>What Makes You Different</h1>
+    <textarea oninput="unlockNext()"></textarea>
+</div>
+
+<div class="slide">
+    <h1>When You Made Me Laugh the Most</h1>
+    <textarea oninput="unlockNext()"></textarea>
+</div>
+
+<div class="slide">
+    <h1>What I Admire About You</h1>
+    <textarea oninput="unlockNext()"></textarea>
+</div>
+
+<div class="slide">
+    <h1>The Little Things You Do</h1>
+    <textarea oninput="unlockNext()"></textarea>
+</div>
+
+<div class="slide">
+    <h1>Why You Matter to Me</h1>
+    <textarea oninput="unlockNext()"></textarea>
+</div>
+
+<div class="slide">
+    <h1>Why It’s You</h1>
+    <textarea oninput="unlockNext()"></textarea>
+</div>
+
+<!-- Slide 11 -->
+<div class="slide">
+    <h1>The Future</h1>
+    <textarea></textarea>
+    <br>
+    <button onclick="exitExperience()">Exit</button>
+</div>
+
+<br>
+
+<button id="prevBtn" onclick="prevSlide()">Previous</button>
+<button id="nextBtn" onclick="nextSlide()" disabled>Next</button>
+
+<script>
+const slides = document.querySelectorAll(".slide");
+const progressBar = document.getElementById("progressBar");
+const nextBtn = document.getElementById("nextBtn");
+
+let currentSlide = 0;
+
+// Music
+const song1 = new Audio("song1.mp3");
+const song2 = new Audio("song2.mp3");
+song1.loop = true;
+song2.loop = true;
+song1.play();
+
+function showSlide(index) {
+    slides[currentSlide].classList.remove("active");
+    currentSlide = index;
+    slides[currentSlide].classList.add("active");
+
+    progressBar.style.width = ((currentSlide + 1) / slides.length) * 100 + "%";
+
+    nextBtn.disabled = true;
+
+    if (currentSlide === 10) {
+        song1.pause();
+        song2.play();
+    }
+}
+
+function nextSlide() {
+    if (currentSlide < slides.length - 1) {
+        showSlide(currentSlide + 1);
+    }
+}
+
+function prevSlide() {
+    if (currentSlide > 0) {
+        showSlide(currentSlide - 1);
+    }
+}
+
+function unlockNext() {
+    nextBtn.disabled = false;
+}
+
+function exitExperience() {
+    if (!confirm("Are you sure you want to exit?")) return;
+    song2.pause();
+    window.location.reload();
+}
+
+// Create floating shapes
+for (let i = 0; i < 15; i++) {
+    let shape = document.createElement("div");
+    shape.className = "shape";
+    shape.style.left = Math.random() * 100 + "vw";
+    shape.style.animationDuration = (15 + Math.random() * 20) + "s";
+    document.body.appendChild(shape);
+}
+</script>
+
 </body>
-</html>
+  </html>
